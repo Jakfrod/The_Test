@@ -24,7 +24,7 @@ alias x='exit'
 alias {ack,ak}='ack-grep'
 
 # Directories
-alias s='cd ..'
+alias up='cd ..'
 
 # Rails
 alias src='script/rails console'
