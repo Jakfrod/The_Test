@@ -59,6 +59,7 @@ alias {tof,tf}='tmux set -g mode-mouse off'
 # linux libnotify
 [ -n OS_LIN ] && alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
+# linux ubuntu apt/aptitude
 if [ -n OS_LIN ]; then 
   alias aptcs='apt-cache search'
   alias apti='sudo aptitude install'
@@ -69,19 +70,35 @@ if [ -n OS_LIN ]; then
   alias aptuu='sudo aptitude update;sudo aptitude upgrade;'
 fi
 
+# mac ports
 if [ -n OS_MAC ]; then
   alias bi='brew install'
   alias pi='sudo port install'
 fi
 
+# grep
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias grep='grep --color=auto'
 
+# ruby gems
 alias gemi='sudo gem install'
 alias gemre='sudo gem reinstall'
 alias gems='sudo gem search'
 
+# dns
+alias {hostname2ip,h2ip}='dig +short'
+
+# mac dhcp service
+if [ -n OS_MAC ]; then
+  alias {dhcpup,dhcp-start}='sudo /bin/launchctl load -w /System/Library/LaunchDaemons/bootps.plist'
+  alias {dhcpdn,dhcp-stop}='sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist'
+fi
+
+# wget
+alias wgetncc='wget --no-check-certificate'
+
+# utils
 alias sitecopy='wget -k -K -E -r -l 10 -p -N -F -nH '
 alias srall='sudo service nginx restart && sudo service php5-fpm restart && sudo service mysqld restart'
 alias ytmp3='youtube-dl --extract-audio --audio-format mp3 '
