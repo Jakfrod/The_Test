@@ -100,5 +100,4 @@ alias wgetncc='wget --no-check-certificate'
 
 # utils
 alias sitecopy='wget -k -K -E -r -l 10 -p -N -F -nH '
-alias srall='sudo service nginx restart && sudo service php5-fpm restart && sudo service mysqld restart'
 alias ytmp3='youtube-dl --extract-audio --audio-format mp3 '
