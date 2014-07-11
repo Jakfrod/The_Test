@@ -1,5 +1,5 @@
 OS=`echo \`uname\` | tr '[:upper:]' '[:lower:]'`
-AURL="https://gist.githubusercontent.com/hightemp/5071909/raw/b77e29f244ab0d593851c8c3453b9003d3ae1c30/bash%20aliases"
+AURL="https://gist.githubusercontent.com/hightemp/5071909/raw/"
 ANAME=".bash_aliases"
 TMPAPATH="/tmp/$ANAME"
 HOMEAPATH="~/$ANAME"
