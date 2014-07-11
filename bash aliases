@@ -4,6 +4,9 @@ OS=`echo \`uname\` | tr '[:upper:]' '[:lower:]'`
 [ "{$OS}" == "darwin" ]    && OS_MAC="yes"
 [ "{$OS}" == "linux" ]     && OS_LIN="yes"
 
+# Self-update
+alias alias_update='wget https://gist.githubusercontent.com/hightemp/5071909/raw/b77e29f244ab0d593851c8c3453b9003d3ae1c30/bash%20aliases -O ~/.bash_aliases; source ~/.bash_aliases'
+
 # ls variants
 alias la='ls -A' 
 alias l='ls -alFtr' 
@@ -26,6 +29,7 @@ alias {ack,ak}='ack-grep'
 # Directories
 alias {up,..}='cd ..'
 
+# Archives
 function extract {
   if [ -z "$1" ]; then
     echo "Usage: extract <path/file_name>.<zip|rar|bz2|gz|tar|tbz2|tgz|Z|7z|xz|ex|tar.bz2|tar.gz|tar.xz>"
