@@ -1,11 +1,15 @@
 OS=`echo \`uname\` | tr '[:upper:]' '[:lower:]'`
+AURL="https://gist.githubusercontent.com/hightemp/5071909/raw/b77e29f244ab0d593851c8c3453b9003d3ae1c30/bash%20aliases"
+ANAME=".bash_aliases"
+TMPAPATH="/tmp/$ANAME"
+HOMEAPATH="~/$ANAME"
 
 [ "{$OS}" == "windowsnt" ] && OS_WIN="yes"
 [ "{$OS}" == "darwin" ]    && OS_MAC="yes"
 [ "{$OS}" == "linux" ]     && OS_LIN="yes"
 
 # Self-update
-alias alias_update='wget https://gist.githubusercontent.com/hightemp/5071909/raw/b77e29f244ab0d593851c8c3453b9003d3ae1c30/bash%20aliases -O ~/.bash_aliases; source ~/.bash_aliases'
+alias alias_update="rm -f $TMPAPATH;wget $AURL -O $TMPAPATH;mv $TMPAPATH $HOMEAPATH;source $HOMEAPATH'
 
 # ls variants
 alias la='ls -A' 
