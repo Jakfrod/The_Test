@@ -9,12 +9,12 @@ HOMEAPATH="~/$ANAME"
 [ "{$OS}" == "linux" ]     && OS_LIN="yes"
 
 # Self-update
-alias alias_update="rm -f $TMPAPATH;wget $AURL -O $TMPAPATH;mv $TMPAPATH $HOMEAPATH;source $HOMEAPATH'
+alias alias_update="rm -f $TMPAPATH;wget $AURL -O $TMPAPATH;mv $TMPAPATH $HOMEAPATH;source $HOMEAPATH"
 
 # ls variants
-alias la='ls -A' 
-alias l='ls -alFtr' 
-alias lsd='ls -d .*' 
+alias la='ls -A'
+alias l='ls -alFtr'
+alias lsd='ls -d .*'
 alias ll='ls -alF'
 [ -n OS_LIN ] && alias ls='ls --color=auto'
 [ -n OS_MAC ] && alias ls='ls -G'
@@ -22,12 +22,8 @@ alias ll='ls -alF'
 # Various
 alias h='history | tail'
 alias hg='history | grep'
-alias mvi='mv -i' 
+alias mvi='mv -i'
 alias rmi='rm -i'
-
-# One letter quickies:
-alias p='pwd'
-alias x='exit'
 alias {ack,ak}='ack-grep'
 
 # Directories
@@ -38,23 +34,23 @@ function extract {
   if [ -z "$1" ]; then
     echo "Usage: extract <path/file_name>.<zip|rar|bz2|gz|tar|tbz2|tgz|Z|7z|xz|ex|tar.bz2|tar.gz|tar.xz>"
   else
-    if [ -f $1 ] ; then
+    if [ -f $1 ]; then
       case $1 in
-        *.tar.bz2)   tar xvjf ../$1    ;;
-        *.tar.gz)    tar xvzf ../$1    ;;
-        *.tar.xz)    tar xvJf ../$1    ;;
-        *.lzma)      unlzma ../$1      ;;
-        *.bz2)       bunzip2 ../$1     ;;
-        *.rar)       unrar x -ad ../$1 ;;
-        *.gz)        gunzip ../$1      ;;
-        *.tar)       tar xvf ../$1     ;;
-        *.tbz2)      tar xvjf ../$1    ;;
-        *.tgz)       tar xvzf ../$1    ;;
-        *.zip)       unzip ../$1       ;;
-        *.Z)         uncompress ../$1  ;;
-        *.7z)        7z x ../$1        ;;
-        *.xz)        unxz ../$1        ;;
-        *.exe)       cabextract ../$1  ;;
+        *.tar.bz2)   tar xvjf $1    ;;
+        *.tar.gz)    tar xvzf $1    ;;
+        *.tar.xz)    tar xvJf $1    ;;
+        *.lzma)      unlzma $1      ;;
+        *.bz2)       bunzip2 $1     ;;
+        *.rar)       unrar x -ad $1 ;;
+        *.gz)        gunzip $1      ;;
+        *.tar)       tar xvf $1     ;;
+        *.tbz2)      tar xvjf $1    ;;
+        *.tgz)       tar xvzf $1    ;;
+        *.zip)       unzip $1       ;;
+        *.Z)         uncompress $1  ;;
+        *.7z)        7z x $1        ;;
+        *.xz)        unxz $1        ;;
+        *.exe)       cabextract $1  ;;
         *)           echo "extract: '$1' - unknown archive method" ;;
       esac
     else
@@ -69,13 +65,13 @@ alias src='script/rails console'
 alias srs='script/rails server'
 alias rgm='rails g model'
 alias rgc='rails g controller'
-alias rdc='rake db:drop db:create db:migrate db:seed' 
+alias rdc='rake db:drop db:create db:migrate db:seed'
 alias rrg='rake routes | grep '
 alias rspecd='rspec --drb '
 
-# git
-alias {gsta,gst}='git status' 
-# Warning: gst conflicts with gnu-smalltalk (when used).
+# Git
+alias gcl='git clone '
+alias gst='git status'
 alias {gbra,gb}='git branch'
 alias {gco,go}='git checkout'
 alias {gcob,gob}='git checkout -b '
@@ -87,55 +83,89 @@ alias glom='git pull origin master'
 alias ghom='git push origin master'
 alias gg='git grep '
 
-# vim
+# Output
+alias lcase="tr '[:upper:]' '[:lower:]'"
+alias ucase="tr '[:lower:]' '[:upper:]'"
+
+# System
+[ -n OS_MAC ] && alias nproc="sysctl hw.ncpu | awk '{print \$2}'"
+CORES=`nproc`
+JOBS=$(expr $CORES + 1)
+alias make="make -j$JOBS"
+
+function install_from_git {
+  URL=$1
+  DIRNAME="/tmp/${URL##*/}"
+  gcl $URL $DIRNAME
+  pushd $DIRNAME
+  make
+  sudo make install
+  popd
+  rm -rf $DIRNAME
+}
+alias ifg="install_from_git "
+
+# Files
+alias lcf="rename 'y/A-Z/a-z/' "
+alias ucf="rename 'y/a-z/A-Z/' "
+
+# Vim
 alias v='vim'
 
-# tmux
+# Tmux
 alias {ton,tn}='tmux set -g mode-mouse on'
 alias {tof,tf}='tmux set -g mode-mouse off'
 
-# linux libnotify
-[ -n OS_LIN ] && alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-# linux ubuntu apt/aptitude
-if [ -n OS_LIN ]; then 
+# Linux ubuntu apt/aptitude
+if [ -n OS_LIN ]; then
   alias aptcs='apt-cache search'
   alias apti='sudo aptitude install'
   alias aptr='sudo aptitude remove'
   alias aptre='sudo aptitude reinstall'
-  alias apts='sudo aptitude search'
+  alias apts='aptitude search'
   alias aptu='sudo aptitude update'
   alias aptuu='sudo aptitude update;sudo aptitude upgrade;'
 fi
 
-# mac ports
+# Mac ports
 if [ -n OS_MAC ]; then
-  alias bi='brew install'
-  alias pi='sudo port install'
+  alias brewi='brew install'
+  alias brews='brew search'
+  alias porti='sudo port install'
+  alias ports='port search'
 fi
 
-# grep
+# Grep
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias grep='grep --color=auto'
 
-# ruby gems
-alias gemi='sudo gem install'
-alias gemre='sudo gem reinstall'
-alias gems='sudo gem search'
+# Ruby gems
+alias gemi='gem install'
+alias gemre='gem reinstall'
+alias gems='gem search'
 
-# dns
+# DNS
 alias {hostname2ip,h2ip}='dig +short'
 
-# mac dhcp service
+# Mac DHCP service
 if [ -n OS_MAC ]; then
   alias {dhcpup,dhcp-start}='sudo /bin/launchctl load -w /System/Library/LaunchDaemons/bootps.plist'
   alias {dhcpdn,dhcp-stop}='sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist'
 fi
 
-# wget
+# Wget
 alias wgetncc='wget --no-check-certificate'
 
-# utils
+function wget_archive_and_extract {
+  URL=$1
+  FILENAME=${URL##*/}
+  wget $URL -O $FILENAME
+  extract $FILENAME
+  rmi $FILENAME
+}
+alias wgetae='wget_archive_and_extract '
+
+# Utils
 alias sitecopy='wget -k -K -E -r -l 10 -p -N -F -nH '
 alias ytmp3='youtube-dl --extract-audio --audio-format mp3 '
