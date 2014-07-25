@@ -4,9 +4,9 @@ ANAME=".bash_aliases"
 TMPAPATH="/tmp/$ANAME"
 HOMEAPATH="~/$ANAME"
 
-[ "{$OS}" == "windowsnt" ] && OS_WIN="yes"
-[ "{$OS}" == "darwin" ]    && OS_MAC="yes"
-[ "{$OS}" == "linux" ]     && OS_LIN="yes"
+[ "$OS" = "windowsnt" ] && OS_WIN="yes"
+[ "$OS" = "darwin" ]    && OS_MAC="yes"
+[ "$OS" = "linux" ]     && OS_LIN="yes"
 
 # Self-update
 alias alias_update="rm -f $TMPAPATH;wget $AURL -O $TMPAPATH;mv $TMPAPATH $HOMEAPATH;source $HOMEAPATH"
@@ -16,8 +16,8 @@ alias la='ls -A'
 alias l='ls -alFtr'
 alias lsd='ls -d .*'
 alias ll='ls -alF'
-[ -n OS_LIN ] && alias ls='ls --color=auto'
-[ -n OS_MAC ] && alias ls='ls -G'
+[ -n "$OS_LIN" ] && alias ls='ls --color=auto'
+[ -n "$OS_MAC" ] && alias ls='ls -G'
 
 # Various
 alias h='history | tail'
@@ -59,6 +59,23 @@ function extract {
   fi
 }
 alias extr='extract '
+function extract_and_remove {
+  extract $1
+  rm -f $1
+}
+alias extrr='extract_and_remove '
+function abspath() {
+    if [ -d "$1" ]; then
+        echo "$(cd $1; pwd)"
+    elif [ -f "$1" ]; then
+        if [[ $1 == */* ]]; then
+            echo "$(cd ${1%/*}; pwd)/${1##*/}"
+        else
+            echo "$(pwd)/$1"
+        fi
+    fi
+}
+alias abspath="abspath "
 
 # Rails
 alias src='script/rails console'
@@ -90,7 +107,7 @@ alias ucase="tr '[:lower:]' '[:upper:]'"
 # System
 alias df="df -h"
 alias du="du -h"
-[ -n OS_MAC ] && alias nproc="sysctl hw.ncpu | awk '{print \$2}'"
+[ -n "$OS_MAC" ] && alias nproc="sysctl hw.ncpu | awk '{print \$2}'"
 CORES=`nproc`
 JOBS=$(expr $CORES + 1)
 alias make="make -j$JOBS"
@@ -107,7 +124,7 @@ function install_from_git {
 }
 alias ifg="install_from_git "
 
-if [ -n OS_MAC ]; then
+if [ -n "$OS_MAC" ]; then
   function free() {
     FREE_BLOCKS=$(vm_stat | grep free | awk '{ print $3 }' | sed 's/\.//')
     INACTIVE_BLOCKS=$(vm_stat | grep inactive | awk '{ print $3 }' | sed 's/\.//')
@@ -134,7 +151,7 @@ alias {ton,tn}='tmux set -g mode-mouse on'
 alias {tof,tf}='tmux set -g mode-mouse off'
 
 # Linux ubuntu apt/aptitude
-if [ -n OS_LIN ]; then
+if [ -n "$OS_LIN" ]; then
   alias aptcs='apt-cache search'
   alias apti='sudo aptitude install'
   alias aptr='sudo aptitude remove'
@@ -145,7 +162,7 @@ if [ -n OS_LIN ]; then
 fi
 
 # Mac ports
-if [ -n OS_MAC ]; then
+if [ -n "$OS_MAC" ]; then
   alias brewi='brew install'
   alias brews='brew search'
   alias porti='sudo port install'
@@ -166,13 +183,19 @@ alias gems='gem search'
 alias {hostname2ip,h2ip}='dig +short'
 
 # Mac DHCP service
-if [ -n OS_MAC ]; then
+if [ -n "$OS_MAC" ]; then
   alias {dhcpup,dhcp-start}='sudo /bin/launchctl load -w /System/Library/LaunchDaemons/bootps.plist'
   alias {dhcpdn,dhcp-stop}='sudo /bin/launchctl unload -w /System/Library/LaunchDaemons/bootps.plist'
 fi
 
+# Clipboard
+[ -n "$OS_MAC" ] && alias getcb='pbpaste'
+[ -n "$OS_WIN" ] && alias getcb='cat /dev/clipboard'
+[ -n "$OS_LIN" ] && alias getcb='xclip -o'
+
 # Wget
 alias wgetncc='wget --no-check-certificate'
+alias wgetc='wget `getcb`'
 
 function wget_archive_and_extract {
   URL=$1
@@ -182,6 +205,7 @@ function wget_archive_and_extract {
   rmi $FILENAME
 }
 alias wgetae='wget_archive_and_extract '
+alias wgetaec='wgetae getcb'
 
 # Utils
 alias sitecopy='wget -k -K -E -r -l 10 -p -N -F -nH '
