@@ -1,4 +1,5 @@
 # FOR PROJECT TEST
+# FOR THE BEST PROJECT!!!
 
 OS=`echo \`uname\` | tr '[:upper:]' '[:lower:]'`
 AURL="https://gist.githubusercontent.com/hightemp/5071909/raw/"
